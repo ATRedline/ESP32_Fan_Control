@@ -257,14 +257,12 @@ class FanControl:
         обеспечивает первичную обработку полученной через UART команды и плавную установку оборотов вентиляторов,
          отправляет отчёт о получении команды и проделанной работе"""
         uart = UART(2, tx=self.uart_pins[0], rx=self.uart_pins[1])
-        count = 0
         while True:
             try:   # для исключения невыявленных проблем
                 cmnd = uart.read()
                 if cmnd:
                     cmnd = cmnd.decode('utf-8')
                 if cmnd and cmnd.startswith('cmnd'):  # Начало обработки команды, если команда начинается с 'cmnd'
-                    count += 1
                     cmnd = cmnd.split(';')  # Разбиваем команду на подкоманды
                     if len(cmnd) > 1:
                         commands = {}
@@ -307,7 +305,7 @@ class FanControl:
                                 break
                             sleep(self.accel_speed)  # время задержки после установки шага всех линий (общее время <6c)
                     while self.led_busy:  # Ожидание процесса led_processing, запускаемого перед модулем плавной
-                        sleep(1)  # смены оборотов, и выполняемого параллельно в фоне
+                        sleep(1)          # смены оборотов, и выполняемого параллельно в фоне
                     uart.read()  # стираем повторные сообщения, которые были полученны в процессе обработки команд
                     uart.write(b'answ:done')  # отправляем отчёт о проделанной работе или о получении комманды
                 sleep(0.5)
@@ -321,7 +319,7 @@ class FanControl:
         self.led_effect_status = 1
         delay = round(0.1 - (0.0007 * speed), 3)
         max_color = round(2.55 * self.led_brightness)
-        step = round(max(1, max_color / 100 * 2))
+        step = max(1, round(max_color / 100 * 2))
         rgb = [0, max_color, 0]
         while self.led_effect:
             for i in range(3):
@@ -360,7 +358,7 @@ class FanControl:
                 if black < 0:
                     black = self.led_pixels + black
                 self.np[led] = col
-                self.np[black] = ([0, 0, 0])
+                self.np[black] = [0, 0, 0]
                 self.np.write()
                 sleep(delay)
                 if not self.led_effect:
