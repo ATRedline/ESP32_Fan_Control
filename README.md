@@ -8,7 +8,7 @@ ESP32 Fan Control
 Программа написана на **Python 3** с использованием **PyQt5**. Использует библиотеку **MSIAfterburner.NET.dll** от **Nick Сonnors**.
 Требует для работы **MSI Afterburner** (Для получения информации о температурах).
 
-![preview](preview.png) 
+![preview](resources/preview.png)
 
 **English version will be added soon**
 
