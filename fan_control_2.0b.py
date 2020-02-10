@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # Author: ATRedline
-#
+# More information: https://github.com/ATRedline/ESP32_Fan_Control
 # Version: 2.0b
 #
-# This is application for ESP32 microcontroller to provide it abillity of controling system fans and ledlights
-#
+# This is application for ESP32 microcontroller to provide it abillity of controling system fans and ledlights.
 # This application use MSIAfterburner.NET.dll by Nick Сonnors and need MSI Afterburner to be launched
 # You can get MSIAfterburner.NET.dll here: https://forums.guru3d.com/threads/msi-afterburner-net-class-library.339656/
+#
+# Written with PyQt5 by Riverbank Computing Limited
+#
+# This file may be used under the terms of the GNU General Public License
+# version 3.0 as published by the Free Software Foundation and appearing in
+# the file LICENSE included in the packaging of this file.  Please review the
+# following information to ensure the GNU General Public License version 3.0
+# requirements will be met: http://www.gnu.org/copyleft/gpl.html.
 
 
 import os
@@ -28,11 +35,9 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QAction, QMen
 
 def thread(my_func):
     """Декоратор, запускающий функцию в отдельном потоке:"""
-
     def wrapper(*args, **kwargs):
         my_thread = threading.Thread(target=my_func, args=args, kwargs=kwargs)
         my_thread.start()
-
     return wrapper
 
 
@@ -1758,7 +1763,7 @@ def effect_speed_changed():
 
 def about_button():
     """Обработка нажатия кнопки посещения сайта проекта"""
-    webbrowser.open_new_tab('https://github.com/')
+    webbrowser.open_new_tab('https://github.com/ATRedline/ESP32_Fan_Control')
 
 
 """Раздел инициализации программы____________________________________________________________________________________"""
