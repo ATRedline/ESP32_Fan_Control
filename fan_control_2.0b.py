@@ -1719,7 +1719,7 @@ def donate_button():
     if appSettings.settings['lang'] == 'ru':
         webbrowser.open_new_tab('https://money.yandex.ru/to/41001350655590')
     else:
-        webbrowser.open_new_tab('https://paypal.me/fancontrol')
+        webbrowser.open_new_tab('https://money.yandex.ru/to/41001350655590')
 
 
 def gpu_checkbox():

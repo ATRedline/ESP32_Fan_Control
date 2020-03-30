@@ -5,7 +5,7 @@
 # This scrypt is application for "ESP32 Fan Control"
 # must be used on ESP32 with MicroPython compiled with machine.pwm module by LoBoris
 #
-# Version 1.0b
+# Version 1.0
 
 
 from utime import sleep
@@ -16,16 +16,18 @@ from _thread import start_new_thread
 
 """Пользовательские переменные:"""
 
-
+# Доступные пины: 0, 2, 4-19, 21-23, 25-27, 32, 33
 network_name = ''            # Имя точки доступа WiFi, ввести если необходимо подключение
 password = ''                # Пароль WiFi (Не желательно использовать Wi-Fi вкупе с динамической подсветкой!)
 accel_speed = 0.05           # Время единицы разгона вентиляторов (Не желательно повышать более чем наа 0.01)
 boost_zone = 50              # Граница зоны оборотов (в процентах) в которой 3-пин вентиляторы бустятся при старте с 0
-PWM_Pins = [19, 5, 16, 2]    # Пины PWM-линий, с первой по четвёртую
-EXT_Pins = [18, 17, 4, 15]   # Пины линий расширения,с первой по четвёртую
+as_pin = 12                  # Пин автостарта, для запуса программы необходимо замкнуть на землю
+PWM_Pins = [4, 0, 15, 2]     # Пины PWM-линий, с первой по четвёртую
+EXT_Pins = [25, 26, 27, 14]  # Пины линий расширения,с первой по четвёртую
 uart_pins = [1, 3]           # Пины UART, изменять при использовании внешнего UART
 led_pin = 13                 # Пин подключения подсветки (WS2811/2812b)
-
+led_relay = 33               # Пин подключения реле питания подсветки
+# Удостоверьтесь в отсутствии дублирующихся пинов!
 
 """Исполняемый код:"""
 
@@ -47,7 +49,7 @@ def do_connect(apn, psswd):
 class FanControl:
     """Класс объекта обработки сигналов FanControl"""
 
-    def __init__(self, acs, boost_zn, pwm_pins, ext_pins, ledpin, uart_pin):
+    def __init__(self, acs, boost_zn, pwm_pins, ext_pins, ledpin, relay_pin, uart_pin):
         """Переменные модулей управления LED-подсветкой:"""
         self.np = ''
         self.new_rgb = []
@@ -57,6 +59,7 @@ class FanControl:
         self.led_effect = 0
         self.led_pixels = 0
         self.led_Pin = ledpin
+        self.relay = relay_pin
         self.led_last_mode = 0
         self.led_brightness = 0
         self.led_last_pixels = 0
@@ -64,6 +67,7 @@ class FanControl:
         self.led_effect_status = 0
         self.led_last_brightness = 0
         self.led_last_effect_speed = 0
+        self.led_relay = Pin(self.relay, Pin.OUT, value=1)
 
         """Переменные модулей управления вентиляторами и инициализация отдельных тредов:"""
 
@@ -305,7 +309,7 @@ class FanControl:
                                 break
                             sleep(self.accel_speed)  # время задержки после установки шага всех линий (общее время <6c)
                     while self.led_busy:  # Ожидание процесса led_processing, запускаемого перед модулем плавной
-                        sleep(1)          # смены оборотов, и выполняемого параллельно в фоне
+                        sleep(1)  # смены оборотов, и выполняемого параллельно в фоне
                     uart.read()  # стираем повторные сообщения, которые были полученны в процессе обработки команд
                     uart.write(b'answ:done')  # отправляем отчёт о проделанной работе или о получении комманды
                 sleep(0.5)
@@ -439,10 +443,9 @@ class FanControl:
 
 """Секция инициализации платы:"""
 
-autostart_pin = Pin(14, Pin.IN, Pin.PULL_DOWN)  # Пин определяющий тип запуска (с выполнением скрипта или без)
-enable_pin = Pin(12, Pin.OUT, value=1)
+autostart_pin = Pin(as_pin, Pin.IN, Pin.PULL_UP)  # Пин определяющий тип запуска (с выполнением скрипта или без)
 
-if autostart_pin.value():
-    processing = FanControl(accel_speed, boost_zone, PWM_Pins, EXT_Pins, led_pin, uart_pins)
+if not autostart_pin.value():
+    processing = FanControl(accel_speed, boost_zone, PWM_Pins, EXT_Pins, led_pin, led_relay, uart_pins)
 if network_name:
     do_connect(network_name, password)
