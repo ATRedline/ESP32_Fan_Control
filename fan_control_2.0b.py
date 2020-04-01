@@ -2,7 +2,7 @@
 #
 # Author: ATRedline
 # More information: https://github.com/ATRedline/ESP32_Fan_Control
-# Version: 2.0b
+# Version: 2.01
 #
 # This is application for ESP32 microcontroller to provide it abillity of controling system fans and ledlights.
 # This application use MSIAfterburner.NET.dll by Nick Сonnors and need MSI Afterburner to be launched
@@ -947,7 +947,7 @@ class SerialPort:
         """Функция, создающая подключение к COM-порту"""
         self.connecting = True
         try:
-            self.opened_port = serial.Serial(port=port, baudrate=115200, timeout=0, write_timeout=3)
+            self.opened_port = serial.Serial(port=port, baudrate=9600, timeout=0, write_timeout=3)
             self.port = port
             self.connecting = False
             ui.pushButton_4.setEnabled(True)

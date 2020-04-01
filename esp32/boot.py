@@ -5,7 +5,7 @@
 # This scrypt is application for "ESP32 Fan Control"
 # must be used on ESP32 with MicroPython compiled with machine.pwm module by LoBoris
 #
-# Version 1.0
+# Version 1.01
 
 
 from utime import sleep
@@ -260,7 +260,7 @@ class FanControl:
         """Основная функция, работает в фоновом процессе, создаёт объект UART, проверяет наличие команд в буфере,
         обеспечивает первичную обработку полученной через UART команды и плавную установку оборотов вентиляторов,
          отправляет отчёт о получении команды и проделанной работе"""
-        uart = UART(2, tx=self.uart_pins[0], rx=self.uart_pins[1])
+        uart = UART(2, baudrate=9600, tx=self.uart_pins[0], rx=self.uart_pins[1])
         while True:
             try:   # для исключения невыявленных проблем
                 cmnd = uart.read()
