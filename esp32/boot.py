@@ -5,32 +5,28 @@
 # This scrypt is application for "ESP32 Fan Control"
 # must be used on ESP32 with MicroPython compiled with machine.pwm module by LoBoris
 #
-# Version 1.01
+# Version 1.1
 
-
+import config
 from utime import sleep
 from neopixel import NeoPixel
 from machine import Pin, PWM, UART
 from _thread import start_new_thread
 
+"""Подгружаемые переменные:"""
 
-"""Пользовательские переменные:"""
-
-# Доступные пины: 0, 2, 4-19, 21-23, 25-27, 32, 33
-network_name = ''            # Имя точки доступа WiFi, ввести если необходимо подключение
-password = ''                # Пароль WiFi (Не желательно использовать Wi-Fi вкупе с динамической подсветкой!)
-accel_speed = 0.05           # Время единицы разгона вентиляторов (Не желательно повышать более чем наа 0.01)
-boost_zone = 50              # Граница зоны оборотов (в процентах) в которой 3-пин вентиляторы бустятся при старте с 0
-as_pin = 12                  # Пин автостарта, для запуса программы необходимо замкнуть на землю
-PWM_Pins = [4, 0, 15, 2]     # Пины PWM-линий, с первой по четвёртую
-EXT_Pins = [25, 26, 27, 14]  # Пины линий расширения,с первой по четвёртую
-uart_pins = [1, 3]           # Пины UART, изменять при использовании внешнего UART
-led_pin = 13                 # Пин подключения подсветки (WS2811/2812b)
-led_relay = 33               # Пин подключения реле питания подсветки
-# Удостоверьтесь в отсутствии дублирующихся пинов!
+network_name = config.network_name
+password = config.password
+accel_speed = config.accel_speed
+boost_zone = config.boost_zone
+as_pin = config.as_pin
+PWM_Pins = config.PWM_Pins
+EXT_Pins = config.EXT_Pins
+uart_pins = config.uart_pins
+led_pin = config.led_pin
+led_relay = config.led_relay
 
 """Исполняемый код:"""
-
 
 def do_connect(apn, psswd):
     """Функция подключения к WiFi сети, вызвается только при введённом имени точке доступа и пароле. Сеть может быть
@@ -271,11 +267,29 @@ class FanControl:
                     if len(cmnd) > 1:
                         commands = {}
                         for i in cmnd:
+                            # Обработка элементов команды пришедшей через uart
                             if i.startswith('np'):
+                                # Обработка команды управления подсветкой
                                 self.led_busy = 1
                                 self.neopixel_control(i)
                             elif i.startswith('fn'):
+                                # Обработка команд управления вентиляторами
                                 commands = self.processing_backstage(commands, i)
+                            elif i.startswith('bz'):
+                                # Обработка команды управления зоной буста
+                                bz = int(i[2:])
+                                self.boost_zone = bz
+                                with open('config.py', 'r') as file:
+                                    text = file.read()
+                                    bst_cfg_pos = text.find('boost_zone')
+                                    bst_cfg_end = bst_cfg_pos + text[bst_cfg_pos:].find('\n')
+                                    config = text[:bst_cfg_pos] + "boost_zone = {0}".format(bz) + text[bst_cfg_end:]
+                                with open('config.py', 'w') as file:
+                                    file.write(config)
+                            elif i == "service":
+                                # Обработка команды перевода в сервис-режим
+                                service_mode = open("service", "x")
+                                service_mode.close()
                         while True:  # Данный кусок кода занимается плавным паралельным изменением оборотов вентиляторов
                             if commands:
                                 for line in commands:
@@ -446,6 +460,9 @@ class FanControl:
 autostart_pin = Pin(as_pin, Pin.IN, Pin.PULL_UP)  # Пин определяющий тип запуска (с выполнением скрипта или без)
 
 if not autostart_pin.value():
-    processing = FanControl(accel_speed, boost_zone, PWM_Pins, EXT_Pins, led_pin, led_relay, uart_pins)
+    if "service" not in uos.listdir():
+        processing = FanControl(accel_speed, boost_zone, PWM_Pins, EXT_Pins, led_pin, led_relay, uart_pins)
+    else:
+        print("SERVICE MODE")
 if network_name:
     do_connect(network_name, password)
