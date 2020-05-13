@@ -1,12 +1,14 @@
 ESP32 Fan Control
 ===
 **English version in the bottom of the page!**
+
 О проекте:
 ---
 **ESP32 Fan Control** - программа для управления корпусными вентиляторами и подсветкой посредством микроконтроллера ESP32.
 
 Программа написана на **Python 3** с использованием **PyQt5**. Использует библиотеку **MSIAfterburner.NET.dll** от **Nick Сonnors**.
 Требует для работы **MSI Afterburner** (Для получения информации о температурах).
+
 
 ![preview](resources/preview.png)
 
@@ -23,9 +25,11 @@ ESP32 Fan Control
 
 Материалы на других ресурсах:
 ---
-[Видео на YouTube (Полный гайд по релизной версии)](https://www.youtube.com/watch?v=hcDneHLOB7w "Видео на YouTube")
-[Статья на overclockers.ru (Полный гайд по релизной версии)](https://overclockers.ru/blog/ATRChannel/show/35068/esp32-fancontrol-reobas-s-funkciej-upravleniya-led-lentoj-svoimi-rukami "Статья на overclockers.ru")
-[Статья на alexgyver.ru](https://alexgyver.ru/ws2812_guide/ "Статья на alexgyver.ru")
+- [Видео на YouTube (Полный гайд по релизной версии)](https://www.youtube.com/watch?v=hcDneHLOB7w "Видео на YouTube")
+
+- [Статья на overclockers.ru (Полный гайд по релизной версии)](https://overclockers.ru/blog/ATRChannel/show/35068/esp32-fancontrol-reobas-s-funkciej-upravleniya-led-lentoj-svoimi-rukami "Статья на overclockers.ru")
+
+- [Статья на alexgyver.ru](https://alexgyver.ru/ws2812_guide/ "Статья на alexgyver.ru")
 
 
 Технические требования:
@@ -36,7 +40,6 @@ ESP32 Fan Control
 
 ![preview](esp32.png)
 
-**Более подробная информация будет доступна позже.**
 
 Известные проблемы:
 ---
