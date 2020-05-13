@@ -3,7 +3,7 @@
 # Author: ATRedline
 #
 # This scrypt is application for "ESP32 Fan Control"
-# must be used on ESP32 with MicroPython compiled with machine.pwm module by LoBoris
+# Must be used on ESP32 with MicroPython compiled with machine.pwm module by LoBoris
 #
 # Version 1.1
 
