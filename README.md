@@ -29,7 +29,7 @@ ESP32 Fan Control
 
 - [Статья на overclockers.ru (Полный гайд по релизной версии)](https://overclockers.ru/blog/ATRChannel/show/35068/esp32-fancontrol-reobas-s-funkciej-upravleniya-led-lentoj-svoimi-rukami "Статья на overclockers.ru")
 
-- [Статья на alexgyver.ru](https://alexgyver.ru/ws2812_guide/ "Статья на alexgyver.ru")
+- [Статья на alexgyver.ru](https://community.alexgyver.ru/threads/reobas-na-esp32-s-funkciej-upravlenija-3pin-4pin-adresnoj-svetodiodnoj-lentoj.2948/ "Статья на alexgyver.ru")
 
 
 Технические требования:
@@ -47,7 +47,11 @@ ESP32 Fan Control
 
 ChangeLog:
 ---
-**v2.01/1.1:**
+**v2.03/1.1:**
+- Добавлена возможность изменять время отсрочки автозапуска (При автоматическом запуске программы по стандарту используется отсрочка в 5 секунд, чтобы MSIAfterburner успел загрузиться). Может помочь на слабых машинах.
+- Заблокирована возможность смены линии до завершения изменения оборотов вентилятора при тестировании.
+
+**v2.02/1.1:**
 - Добавлена возможность перезагружать устройство в сервисный режим для обеспечения удобства обслуживания и обновления. Кнопка перезагрузки в сервисный режим разместилась в "Дополнительно" окна Настроек. При нажатии в файловой системе устройства создаётся файл "service", при наличии которого, устройство НЕ будет загружать скрипт FanControl и позволит подключаться при помощи Espy. Для возобновления работы скрипта FanControl файл "service" необходимо удалить
 - Добавлена возможность редактировать зону, в которой на 3-pin вентиляторы подаётся бустовый импульс, без внесения изменений в конфиг файл вручную: опция редактирования зоны буста для 3-pin вентиляторов разместилась во вкладке "Дополнительно" окна настроек.
 - Переменные скрипта FanControl вынесены в отдельный файл config.py, редактировать и заменять основной файл boot.py теперь можно без потери и необходимости редактировать конфигурационные переменные. Так же, позволит в будущем реализовать возможность менять часть переменных из программы (уже реализована такая возможность с зоной буста 3-pin). ВНИМАНИЕ, при "пепреезде" с первой версии boot.py потребуется перенести свои настройки в config.py!
@@ -58,7 +62,7 @@ ChangeLog:
 
 ---
 
-About
+About:
 ---
 
 
@@ -68,7 +72,7 @@ Program is written on Python 3 with using PyQt5. It uses MSIAfterburner.NET.dll 
 
 ![preview](resources/preview_eng.png)
 
-Realized functions
+Realized functions:
 ---
 - Control of four PWM lines in six temperature zones
 - Control of 3-pin fans with "cold launch" ability
@@ -79,13 +83,13 @@ Realized functions
 - Dynamycal led light (Some led-effects)
 - Static led light with coloured temperature zones indication (With smooth colour changing)
 
-Technical requirements
+Technical requirements:
 ---
 - ESP32 DevKit with CP2102 USB-UART convertor. ESP must be flashed with custom uP with integrated PWM module of Loboris (my build you can find in the repo)
 - Fans must be connected with full galvanic isolation (it can be realized on cheap PC817 modules from aliexpress, or, in the case of handmade RCB, you can use isolator such as ADUM1400 or HCPL2630/2631)
 - Supported adress LED-tape: ws2811, and, must be ws2812b (i not tested last one yet). You can power about 15 leds from USB 3.0, or use outer source of power.
 
-Short HOWTO
+Short HOWTO:
 ---
 Defaul frequencies for PWM fan controling are about 21kHz.
 In \scheme folder, you can find two schemas:
@@ -103,3 +107,17 @@ In \scheme folder, you can find two schemas:
 Known issues:
 ---
 - Some noizes on LED-tape in dynamic modes
+
+ChangeLog:
+---
+**v2.03/1.1:**
+- Added ability to change application autoload delay (Application is loading with windows by default with 5sec delay to give some time for MSIAfterberner to be launched)
+- Ability of line change while fan is changing its speed in testing mode is blocked.
+
+**v2.02/1.1:**
+- Added 'Service mode' to provide easyeler maintenance and flashing. After entering service mode device creating "service" file in its file system. You need to remove "service" for connect to device with ESP32 FanControl again.
+- Added ability to change 3-pin fans boost zone. Its now in "Additional" tab of "Additionals" window.
+- Users variables of boot.py script are now in config.py to provide easyeler update to new versions of boot.py.
+- Some small bugfixes in main programm.
+- RCB scheme is changed (still wasnt checked on practice!) to provide safeness of motherboard PWM-lines
+---
