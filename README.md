@@ -35,7 +35,7 @@ ESP32 Fan Control
 ---
 - ESP32 DevKit на USB-UART конвертере CP2102. ESP должна быть прошита билдом MicroPython скомпиллированным с библиотекой machine_pwm от loboris.
 - Подключение вентиляторов осуществляется с полной гальванической развязкой (реализуемо на недорогих модулях с PC817 c AliExpress, или более серьёзными изоляторами вроде HCPL2630/2631, ISO7240, ADUM1400)
-- Поддерживается адресная LED-лента ws2812b, ws2811 (Для использования необходим конвертор логических уровней, разводка добавлена в RCB версии 1.2). Подключается от внешнего источника питания или с полной гальванической развязкой
+- Поддерживается адресная LED-лента ws2812b, ws2811 (Для подключения необходим конвертор логических уровней 3.3->5v, разводка добавлена в RCB версии 1.2, работоспособность не проверялась). Подключается от внешнего источника питания или с полной гальванической развязкой
 
 ![preview](resources/esp32.png)
 
@@ -132,7 +132,6 @@ ChangeLog:
 - Users variables of boot.py script are now in config.py to provide easyeler update to new versions of boot.py.
 - Some small bugfixes in main programm.
 - RCB scheme is changed (still wasnt checked on practice!) to provide safeness of motherboard PWM-lines
----
 
 Next steps:
 ---
