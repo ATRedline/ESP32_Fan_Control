@@ -6,11 +6,10 @@ ESP32 Fan Control
 ---
 **ESP32 Fan Control** - программа для управления корпусными вентиляторами и подсветкой посредством микроконтроллера ESP32.
 
-Программа написана на **Python 3** с использованием **PyQt5**. Использует библиотеку **MSIAfterburner.NET.dll** от **Nick Сonnors**.
-Требует для работы **MSI Afterburner** (Для получения информации о температурах).
+Программа написана на **Python 3** с использованием **PyQt5**. Для извлечения информации о температурах использует библиотеку **OpenHardwareMonitorLib.dll** от **Michael Möller** или **MSIAfterburner.NET.dll** от **Nick Сonnors**, в случае использования последней требует для работы **MSI Afterburner**.
 
 
-![preview](resources/preview.png)
+![preview](images/preview.png)
 
 Релизованые функции:
 ---
@@ -36,9 +35,9 @@ ESP32 Fan Control
 ---
 - ESP32 DevKit на USB-UART конвертере CP2102. ESP должна быть прошита билдом MicroPython скомпиллированным с библиотекой machine_pwm от loboris.
 - Подключение вентиляторов осуществляется с полной гальванической развязкой (реализуемо на недорогих модулях с PC817 c AliExpress, или более серьёзными изоляторами вроде HCPL2630/2631, ISO7240, ADUM1400)
-- Поддерживается адресная LED-лента ws2811, ws2812b (Не проверялась). Подключается от внешнего источника питания или с полной гальванической развязкой
+- Поддерживается адресная LED-лента ws2812b, ws2811 (Для использования необходим конвертор логических уровней, разводка добавлена в RCB версии 1.2). Подключается от внешнего источника питания или с полной гальванической развязкой
 
-![preview](esp32.png)
+![preview](resources/esp32.png)
 
 
 Известные проблемы:
@@ -47,6 +46,9 @@ ESP32 Fan Control
 
 ChangeLog:
 ---
+**v2.1/1.1**
+- Программа переведена на работу "по дефолту" с OpenHardwareMonitorLib.dll от Michael Möller, и более не требует MSI Afterburner для запуска. Возможность работы с MSIAfterburner.NET.dll сохранена, соответствующая опция представленна в настройках.
+
 **v2.03/1.1:**
 - Добавлена возможность изменять время отсрочки автозапуска (При автоматическом запуске программы по стандарту используется отсрочка в 5 секунд, чтобы MSIAfterburner успел загрузиться). Может помочь на слабых машинах.
 - Заблокирована возможность смены линии до завершения изменения оборотов вентилятора при тестировании.
@@ -57,6 +59,13 @@ ChangeLog:
 - Переменные скрипта FanControl вынесены в отдельный файл config.py, редактировать и заменять основной файл boot.py теперь можно без потери и необходимости редактировать конфигурационные переменные. Так же, позволит в будущем реализовать возможность менять часть переменных из программы (уже реализована такая возможность с зоной буста 3-pin). ВНИМАНИЕ, при "пепреезде" с первой версии boot.py потребуется перенести свои настройки в config.py!
 - Небольшой багфикс в основной программе, исправлен баг, при котором не отображалось лого ESP32 во вкладке "Инфо"
 - Отредактирована схема RCB (Схема всё-ещё не проверена на практике!), для обеспечения безопасности PWM-линий матплаты на плату вразрез заборных линий PWM-сигнала добавлены диодыю, увеличено расстояние между отверстиями входных и выходных 4-pin разъёмов
+
+Планы:
+---
+-Перевод основного приложения на .net/wpf с внесением неких изменений в работу скрипта аппаратной части
+-Добавление возможности учёта показаний термопары (Возможность подключения термопары реализована в последней схеме RCB, поддержка в софте отсутствует!)
+-Добавление возможности подключения дисплеев
+
 ---
 **English version**
 
@@ -68,9 +77,9 @@ About:
 
 **ESP32 Fan Control** - hardware based programm, what provides ability of control for case fans and led tapes.
 
-Program is written on Python 3 with using PyQt5. It uses MSIAfterburner.NET.dll by Nick Connors, and require process of MSI Afterburner to be runned (for temperature probs).
+Program is written on **Python 3** with using **PyQt5**. For temperatures information extraction it uses **OpenHardwareMonitorLib.dll** by **Michael Möller** or **MSIAfterburner.NET.dll** by **Nick Connors**,  in case of using last one also requires  **MSI Afterburner**.
 
-![preview](resources/preview_eng.png)
+![preview](images/preview_eng.png)
 
 Realized functions:
 ---
@@ -87,7 +96,7 @@ Technical requirements:
 ---
 - ESP32 DevKit with CP2102 USB-UART convertor. ESP must be flashed with custom uP with integrated PWM module of Loboris (my build you can find in the repo)
 - Fans must be connected with full galvanic isolation (it can be realized on cheap PC817 modules from aliexpress, or, in the case of handmade RCB, you can use isolator such as ADUM1400 or HCPL2630/2631)
-- Supported adress LED-tape: ws2811, and, must be ws2812b (i not tested last one yet). You can power about 15 leds from USB 3.0, or use outer source of power.
+- Supported adress LED-tape: ws2812b, and, must be ws2811 (not tested yet. To support, levels switcher 3.3->5v need to be added to led signal line). You can power about 15 leds from USB 3.0, or use outer source of power.
 
 Short HOWTO:
 ---
@@ -110,6 +119,9 @@ Known issues:
 
 ChangeLog:
 ---
+**v2.1/1.1**
+-Default source lib is changed from MSIAfterburner.NET.dll to OpenHardwareMonitorLib.dll by Michael Möller. FanControl now is not need MSIAfterburner to work, but ability of work with MSI Afterburner as source lib is saved.
+
 **v2.03/1.1:**
 - Added ability to change application autoload delay (Application is loading with windows by default with 5sec delay to give some time for MSIAfterberner to be launched)
 - Ability of line change while fan is changing its speed in testing mode is blocked.
@@ -121,3 +133,9 @@ ChangeLog:
 - Some small bugfixes in main programm.
 - RCB scheme is changed (still wasnt checked on practice!) to provide safeness of motherboard PWM-lines
 ---
+
+Next steps:
+---
+-Main program migration to .net/wpf with some changes in hardware script
+-Adding ability of using thermocouple data (thermocouple controller already added to RCB scheme v1.2)
+-Adding ability of display connection
