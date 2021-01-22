@@ -62,9 +62,9 @@ ChangeLog:
 
 Планы:
 ---
--Перевод основного приложения на .net/wpf с внесением неких изменений в работу скрипта аппаратной части
--Добавление возможности учёта показаний термопары (Возможность подключения термопары реализована в последней схеме RCB, поддержка в софте отсутствует!)
--Добавление возможности подключения дисплеев
+- Перевод основного приложения на .net/wpf с внесением неких изменений в работу скрипта аппаратной части
+- Добавление возможности учёта показаний термопары (Возможность подключения термопары реализована в последней схеме RCB, поддержка в софте отсутствует!)
+- Добавление возможности подключения дисплеев
 
 ---
 **English version**
@@ -136,6 +136,6 @@ ChangeLog:
 
 Next steps:
 ---
--Main program migration to .net/wpf with some changes in hardware script
--Adding ability of using thermocouple data (thermocouple controller already added to RCB scheme v1.2)
--Adding ability of display connection
+- Main program migration to .net/wpf with some changes in hardware script
+- Adding ability of using thermocouple data (thermocouple controller already added to RCB scheme v1.2)
+- Adding ability of display connection
