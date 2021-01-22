@@ -25,4 +25,4 @@
  - Разводка перевёрстана для беcпроблемной конвертации в gerber и отправки на печать
  
  ![preview](scheme_preview.png)
- ![preview]( scheme_ext_preview.png.png)
+ ![preview]( scheme_ext_preview.png)
